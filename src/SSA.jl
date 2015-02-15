@@ -33,7 +33,7 @@ type SSAResult
 end
 
 @doc doc"""
-  This function performs Gillespies stochastic simulation algorithm. It takes the following arguments:
+  This function performs Gillespie's stochastic simulation algorithm. It takes the following arguments:
 
       - **x0** : a `Vector` of `Int64`, representing the initial states of the system.
       - **F** : a `Function`, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms: a `Vector` of `Float64` representing the parameters of the system.
@@ -83,7 +83,7 @@ end
   This takes a single argument of type `SSAResult` and returns a `DataFrame`.
   """ ->
 function ssa_data(s::SSAResult)
-  df = cbind(DataFrame(time=s.time),convert(DataFrame,s.data))
+  df = hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
   df
 end
 
