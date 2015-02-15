@@ -1,8 +1,14 @@
+@doc doc"""
+  A type storing the status at the end of a call to `ssa`.
+  """ ->
 type SSAStats
   termination_status::ASCIIString
   nsteps::Int64
 end
 
+@doc doc"""
+  A type storing the call to `ssa`.
+  """ ->
 type SSAArgs
   x0::Vector{Int64}
   F::Function
@@ -11,6 +17,13 @@ type SSAArgs
   tf::Float64
 end
 
+@doc doc"""
+  This type stores the output of `ssa`, and comprises of:
+    - `time`: a `Vector` of `Float64`, containing the times of simulated events.
+    - `data`: a `Matrix` of `Int64`, containing the simulated states.
+    - `stats`: an instance of `SSAStats`.
+    - `args` : arguments passed to `ssa`.
+  """ ->
 type SSAResult
   time::Vector{Float64}
   data::Matrix{Int64}
@@ -18,6 +31,16 @@ type SSAResult
   args::SSAArgs
 end
 
+@doc doc"""
+  This function performs Gillespies stochastic simulation algorithm. It takes the following arguments:
+    - `x0`: a `Vector` of `Int64`, representing the initial states of the system.
+    - `F`: a function, which itself takes two arguments:
+      - `x`, a `Vector` of `Int64` representing the states.
+      - `parms`: a `Vector` of `Float64` representing the parameters of the system.
+    - `nu`: a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
+    - `parms`: a `Vector` of `Float64` representing the parameters of the system.
+    - `tf`: the final simulation time (`Float64`)
+  """ ->
 function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
   # Args
   args = SSAArgs(x0,F,nu,parms,tf)
@@ -56,6 +79,9 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
   return(result)
 end
 
+@doc doc"""
+  This takes a single argument of type `SSAResult` and returns a `DataFrame`.
+  """ ->
 function ssa_data(s::SSAResult)
   df = cbind(DataFrame(time=s.time),convert(DataFrame,s.data))
   df
