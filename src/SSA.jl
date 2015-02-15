@@ -19,10 +19,11 @@ end
 
 @doc doc"""
   This type stores the output of `ssa`, and comprises of:
-    - `time`: a `Vector` of `Float64`, containing the times of simulated events.
-    - `data`: a `Matrix` of `Int64`, containing the simulated states.
-    - `stats`: an instance of `SSAStats`.
-    - `args` : arguments passed to `ssa`.
+
+      - **time** : a `Vector` of `Float64`, containing the times of simulated events.
+      - **data** : a `Matrix` of `Int64`, containing the simulated states.
+      - **stats** : an instance of `SSAStats`.
+      - **args** : arguments passed to `ssa`.
   """ ->
 type SSAResult
   time::Vector{Float64}
@@ -34,31 +35,31 @@ end
 @doc doc"""
   This function performs Gillespies stochastic simulation algorithm. It takes the following arguments:
 
-      - x0: a `Vector` of `Int64`, representing the initial states of the system.
-      - `F`: a `Function`, which itself takes two arguments; `x`, a `Vector` of `Int64` representing the states, and `parms`: a `Vector` of `Float64` representing the parameters of the system.
-      - nu: a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
-      - parms: a `Vector` of `Float64` representing the parameters of the system.
-      - tf: the final simulation time (`Float64`)
+      - **x0** : a `Vector` of `Int64`, representing the initial states of the system.
+      - **F** : a `Function`, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms: a `Vector` of `Float64` representing the parameters of the system.
+      - **nu** : a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
+      - **parms** : a `Vector` of `Float64` representing the parameters of the system.
+      - **tf** : the final simulation time (`Float64`)
   """ ->
 function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
   # Args
   args = SSAArgs(x0,F,nu,parms,tf)
   # Set up time array
-  ta=Array(Float64,0)
-  t=0.0
+  ta = Array(Float64,0)
+  t = 0.0
   push!(ta,t)
   # Set up initial x
-  x=reshape(x0,1,length(x0))
-  xa=deepcopy(x)
+  x = reshape(x0,1,length(x0))
+  xa = deepcopy(x)
   # Main loop
   termination_status = "finaltime"
   nsteps = 0
-  while t<= tf
+  while t <= tf
     pf = F(x,parms)
     pf = WeightVec(convert(Array{Float64,1},pf))
     # Update time
     sumpf = sum(pf)
-    if sumpf==0.0
+    if sumpf == 0.0
         termination_status = "zeroprop"
         break
     end
@@ -68,8 +69,8 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
     # Update event
     ev = sample(pf)
     deltax = nu[ev,:]
-    x =x .+ deltax
-    xa=vcat(xa,x)
+    x = x .+ deltax
+    xa = vcat(xa,x)
     # update nsteps
     nsteps = nsteps + 1
   end
@@ -85,3 +86,4 @@ function ssa_data(s::SSAResult)
   df = cbind(DataFrame(time=s.time),convert(DataFrame,s.data))
   df
 end
+
