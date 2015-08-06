@@ -36,7 +36,7 @@ end
   This function performs Gillespie's stochastic simulation algorithm. It takes the following arguments:
 
       - **x0** : a `Vector` of `Int64`, representing the initial states of the system.
-      - **F** : a `Function`, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms: a `Vector` of `Float64` representing the parameters of the system.
+      - **F** : a `Function`, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms, a `Vector` of `Float64` representing the parameters of the system.
       - **nu** : a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
       - **parms** : a `Vector` of `Float64` representing the parameters of the system.
       - **tf** : the final simulation time (`Float64`)

@@ -2,7 +2,7 @@ using Gillespie
 using Gadfly
 
 function F(x,parms)
-  (S,I) = x
+  (S,I,R) = x
   (beta,mu) = parms
   infection = beta*S*I
   recovery = mu*I
