@@ -40,4 +40,4 @@ p=plot(data,
   Guide.title("SIR epidemiological model"))
 ```
 
-![]("sir.svg")
+<img src="sir.svg">
