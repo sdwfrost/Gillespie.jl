@@ -40,4 +40,4 @@ p=plot(data,
   Guide.title("SIR epidemiological model"))
 ```
 
-<object data="https://raw.githubusercontent.com/sdwfrost/Gillespie.jl/master/sir.svg" type="image/svg+xml"></object>
+![SIR](https://github.com/sdwfrost/Gillespie.jl/blob/master/sir.png)
