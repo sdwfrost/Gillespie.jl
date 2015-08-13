@@ -6,7 +6,7 @@ This is a preliminary implementation of [Gillespie's direct method](http://en.wi
 
 An example of an SIR epidemiological model:
 
-```
+```julia
 using Gillespie
 using Gadfly
 
@@ -40,4 +40,4 @@ p=plot(data,
   Guide.title("SIR epidemiological model"))
 ```
 
-<img src="sir.svg">
+<object data="https://raw.githubusercontent.com/sdwfrost/Gillespie.jl/master/sir.svg" type="image/svg+xml"></object>
