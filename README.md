@@ -37,7 +37,7 @@ p=plot(data,
   Guide.manual_color_key("Population",
                             ["S", "I", "R"],
                             ["red", "blue", "green"]),
-							Guide.title("SIR epidemiological model"))
+  Guide.title("SIR epidemiological model"))
 ```
 
-![](sir.svg)
+![]("sir.svg")
