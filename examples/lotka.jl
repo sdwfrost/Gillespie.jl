@@ -1,6 +1,5 @@
 using Gillespie
 using Gadfly
-using Debug
 
 function F(x,parms)
   (Y1,Y2) = x
@@ -9,13 +8,21 @@ function F(x,parms)
 end
 
 x0 = [1000,1000]
-nu = [[1 0];[-1 1];[-1 0]]
+nu = [[1 0];[-1 1];[0 -1]]
 parms = [10.0,0.01,10.0]
 tf = 2.0
 srand(1234)
 
-@debug result = ssa(x0,F,nu,parms,tf)
+result = ssa(x0,F,nu,parms,tf)
 
 data = ssa_data(result)
 
-F(x0,parms)
+p=plot(data,
+  layer(x="time",y="x1",Geom.step,Theme(default_color=color("red"))),
+  layer(x="time",y="x2",Geom.step,Theme(default_color=color("blue"))),
+  Guide.xlabel("Time"),
+  Guide.ylabel("Number"),
+  Guide.manual_color_key("Population",
+                            ["Y1", "Y2"],
+                            ["red", "blue"]),
+  Guide.title("Lotka-Volterra predator prey"))

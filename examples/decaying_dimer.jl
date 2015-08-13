@@ -17,3 +17,13 @@ result = ssa(x0,F,nu,parms,tf)
 
 data = ssa_data(result)
 
+p=plot(data,
+  layer(x="time",y="x1",Geom.step,Theme(default_color=color("red"))),
+  layer(x="time",y="x2",Geom.step,Theme(default_color=color("blue"))),
+  layer(x="time",y="x3",Geom.step,Theme(default_color=color("green"))),
+  Guide.xlabel("Time"),
+  Guide.ylabel("Number"),
+  Guide.manual_color_key("Population",
+                            ["S1", "S2", "S3"],
+                            ["red", "blue", "green"]),
+  Guide.title("Decaying dimer"))
