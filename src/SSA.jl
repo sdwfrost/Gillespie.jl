@@ -50,7 +50,7 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
   push!(ta,t)
   # Set up initial x
   x = reshape(x0,1,length(x0))
-  xa = deepcopy(x)
+  xa = vec(x)
   # Main loop
   termination_status = "finaltime"
   nsteps = 0
@@ -70,12 +70,15 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
     ev = sample(pf)
     deltax = nu[ev,:]
     x = x .+ deltax
-    xa = vcat(xa,x)
+    for xx in x
+      push!(xa,xx)
+    end
     # update nsteps
     nsteps = nsteps + 1
   end
   stats = SSAStats(termination_status,nsteps)
-  result = SSAResult(ta,xa,stats,args)
+  xar = transpose(reshape(xa,length(x),nsteps+1))
+  result = SSAResult(ta,xar,stats,args)
   return(result)
 end
 
