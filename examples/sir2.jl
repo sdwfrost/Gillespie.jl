@@ -14,8 +14,10 @@ nu = [[-1 1 0];[0 -1 1]]
 parms = [0.1/1000.0,0.01]
 tf = 250.0
 srand(1234)
+immutable G; end
+call(::Type{G},x,parms) = F(x,parms)
 
-result = ssa(x0,F,nu,parms,tf)
+result = ssa(x0,G,nu,parms,tf)
 
 data = ssa_data(result)
 
