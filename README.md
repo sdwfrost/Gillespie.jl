@@ -41,3 +41,5 @@ p=plot(data,
 ```
 
 ![SIR](https://github.com/sdwfrost/Gillespie.jl/blob/master/sir.png)
+
+Passing functions as arguments in Julia (currently) incurs a performance penalty. One can circumvent this by passing an immutable object, with ```call``` overloaded. An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl).
