@@ -3,9 +3,9 @@ using Gadfly
 
 function F(x,parms)
   (S,I,R) = x
-  (beta,mu) = parms
+  (beta,gamma) = parms
   infection = beta*S*I
-  recovery = mu*I
+  recovery = gamma*I
   [infection,recovery]
 end
 

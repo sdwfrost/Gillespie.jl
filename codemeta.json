@@ -1,0 +1,23 @@
+{
+  "@context": "https://raw.githubusercontent.com/mbjones/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@id": "http://orcid.org/0000-0002-5207-9879",
+      "@type": "Person",
+      "email": "sdwfrost@gmail.com",
+      "name": "Simon Frost",
+      "affiliation": "University of Cambridge"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "http://github.com/sdwfrost/Gillespie.jl",
+  "datePublished": "2016-07-18",
+  "dateModified": "2016-07-18",
+  "dateCreated": "2016-07-18",
+  "description": "Stochastic simulation algorithm in Julia",
+  "keywords": "Julia, stochastic simulation, Doob-Gillespie algorithm",
+  "license": "MIT",
+  "title": "Gillespie.jl",
+  "version": "v1.0.0"
+}

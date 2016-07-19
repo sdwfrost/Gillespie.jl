@@ -1,10 +1,23 @@
 # Gillespie
 
 [![Build Status](https://travis-ci.org/sdwfrost/Gillespie.jl.svg?branch=master)](https://travis-ci.org/sdwfrost/Gillespie.jl)
+[![Coverage Status](https://coveralls.io/repos/github/sdwfrost/Gillespie.jl/badge.svg?branch=master)](https://coveralls.io/github/sdwfrost/Gillespie.jl?branch=master)
 
-This is a preliminary implementation of [Gillespie's direct method](http://en.wikipedia.org/wiki/Gillespie_algorithm) for performing stochastic simulations. It borrows the basic interface (although none of the code) from the R library [`GillespieSSA`](http://www.jstatsoft.org/v25/i12/paper) by Mario Pineda-Krch, although `Gillespie.jl` only implements the standard exact method at present, whereas `GillespieSSA` also includes tau-leaping, *etc.*.
+## Statement of need
 
-An example of an SIR epidemiological model:
+This is an implementation of [Gillespie's direct method](http://en.wikipedia.org/wiki/Gillespie_algorithm) for performing stochastic simulations, which are widely used in many fields, including systems biology and epidemiology. It borrows the basic interface (although none of the code) from the R library [`GillespieSSA`](http://www.jstatsoft.org/v25/i12/paper) by Mario Pineda-Krch, although `Gillespie.jl` only implements the standard exact method at present, whereas `GillespieSSA` also includes tau-leaping, *etc.*. It is intended to offer performance on par with hand-coded C code; please file an issue if you find an example that is significantly slower (2 to 5 times) than C.
+
+## Installation
+
+```Gillespie.jl``` can be installed from the Julia REPL using the following command.
+
+```julia
+Pkg.clone("http://github.com/sdwfrost/Gillespie.jl")
+```
+
+## Example usage
+
+An example of a [susceptible-infected-recovered (SIR) epidemiological model](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model_without_vital_dynamics) is as follows.
 
 ```julia
 using Gillespie
@@ -12,9 +25,9 @@ using Gadfly
 
 function F(x,parms)
   (S,I,R) = x
-  (beta,mu) = parms
+  (beta,gamma) = parms
   infection = beta*S*I
-  recovery = mu*I
+  recovery = gamma*I
   [infection,recovery]
 end
 
@@ -42,4 +55,13 @@ p=plot(data,
 
 ![SIR](https://github.com/sdwfrost/Gillespie.jl/blob/master/sir.png)
 
-Passing functions as arguments in Julia (currently) incurs a performance penalty. One can circumvent this by passing an immutable object, with ```call``` overloaded. An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl).
+Julia versions of the examples used in [`GillespieSSA`](http://www.jstatsoft.org/v25/i12/paper) are given in the [examples](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples) directory.
+
+Passing functions as arguments in Julia (currently) incurs a performance penalty. One can circumvent this by passing an immutable object, with ```call``` overloaded, as follows.
+
+```julia
+immutable G; end
+call(::Type{G},x,parms) = F(x,parms)
+```
+
+An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl).
