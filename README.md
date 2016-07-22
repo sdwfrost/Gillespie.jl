@@ -1,10 +1,13 @@
-[![Stories in Ready](https://badge.waffle.io/sdwfrost/Gillespie.jl.png?label=ready&title=Ready)](https://waffle.io/sdwfrost/Gillespie.jl)
+
 # Gillespie
 
 [![Build Status](https://travis-ci.org/sdwfrost/Gillespie.jl.svg?branch=master)](https://travis-ci.org/sdwfrost/Gillespie.jl)
 [![Coverage Status](https://coveralls.io/repos/github/sdwfrost/Gillespie.jl/badge.svg?branch=master)](https://coveralls.io/github/sdwfrost/Gillespie.jl?branch=master)
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://USER_NAME.github.io/PACKAGE_NAME.jl/stable)
+[![Stories in Ready](https://badge.waffle.io/sdwfrost/Gillespie.jl.png?label=ready&title=Ready)](https://waffle.io/sdwfrost/Gillespie.jl)
 [![status](http://joss.theoj.org/papers/3cfdd80b93a9123b173e9617c1e6a238/status.svg)](http://joss.theoj.org/papers/3cfdd80b93a9123b173e9617c1e6a238)
+
+[![Throughput Graph](https://graphs.waffle.io/sdwfrost/Gillespie.jl/throughput.svg)](https://waffle.io/sdwfrost/Gillespie.jl/metrics/throughput)
 
 ## Statement of need
 
