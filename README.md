@@ -13,7 +13,7 @@ This is an implementation of [Gillespie's direct method](http://en.wikipedia.org
 ```Gillespie.jl``` can be installed from the Julia REPL using the following command.
 
 ```julia
-Pkg.clone("http://github.com/sdwfrost/Gillespie.jl")
+Pkg.add("Gillespie")
 ```
 
 ## Example usage
@@ -66,3 +66,11 @@ call(::Type{G},x,parms) = F(x,parms)
 ```
 
 An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl).
+
+## Benchmarks
+
+The speed of the SIR model in `Gillespie.jl` was compared to:
+- A version using the R package `GillespieSSA`
+- Handcoded versions of the SIR model in Julia, R, and Rcpp
+
+Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) are available as gists.
