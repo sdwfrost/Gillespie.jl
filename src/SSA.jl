@@ -30,6 +30,25 @@ type SSAResult
 end
 
 "
+This function is a substitute for `StatsBase.sample(wv::WeightVec)`, which avoids recomputing the sum and size of the weight vector, as well as a type conversion of the propensity vector. It takes the following arguments:
+
+- **w** : an `Array{Float64,1}`, representing propensity function weights.
+- **s** : the sum of `w`.
+- **n** : the length of `w`.
+
+"
+function pfsample(w::Array{Float64,1},s::Float64,n::Int64)
+    t = rand() * s
+    i = 1
+    cw = w[1]
+    while cw < t && i < n
+        i += 1
+        @inbounds cw += w[i]
+    end
+    return i
+end
+
+"
 This function performs Gillespie's stochastic simulation algorithm. It takes the following arguments:
 
 - **x0** : a `Vector` of `Int64`, representing the initial states of the system.
@@ -47,14 +66,17 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
   t = 0.0
   push!(ta,t)
   # Set up initial x
-  x = reshape(x0,1,length(x0))
+  nstates = length(x0)
+  x = copy(x0)
+  x = reshape(x,1,nstates)
   xa = vec(x)
+  # Number of propensity functions
+  numpf = size(nu,1)
   # Main loop
   termination_status = "finaltime"
   nsteps = 0
   while t <= tf
     pf = F(x,parms)
-    pf = WeightVec(convert(Array{Float64,1},pf))
     # Update time
     sumpf = sum(pf)
     if sumpf == 0.0
@@ -65,9 +87,11 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
     t = t + dt
     push!(ta,t)
     # Update event
-    ev = sample(pf)
+    ev = pfsample(pf,sumpf,numpf)
     deltax = nu[ev,:]
-    x = x .+ deltax
+    for i in 1:nstates
+      @inbounds x[1,i] = x[1,i]+deltax[i]
+    end
     for xx in x
       push!(xa,xx)
     end
@@ -88,14 +112,17 @@ function ssa{F}(x0::Vector{Int64},::Type{F},nu::Matrix{Int64},parms::Vector{Floa
   t = 0.0
   push!(ta,t)
   # Set up initial x
-  x = reshape(x0,1,length(x0))
+  nstates = length(x0)
+  x = copy(x0)
+  x = reshape(x,1,nstates)
   xa = vec(x)
+  # Number of propensity functions
+  numpf = size(nu,1)
   # Main loop
   termination_status = "finaltime"
   nsteps = 0
   while t <= tf
     pf = F(x,parms)
-    pf = WeightVec(convert(Array{Float64,1},pf))
     # Update time
     sumpf = sum(pf)
     if sumpf == 0.0
@@ -106,9 +133,11 @@ function ssa{F}(x0::Vector{Int64},::Type{F},nu::Matrix{Int64},parms::Vector{Floa
     t = t + dt
     push!(ta,t)
     # Update event
-    ev = sample(pf)
+    ev = pfsample(pf,sumpf,numpf)
     deltax = nu[ev,:]
-    x = x .+ deltax
+    for i in 1:nstates
+      @inbounds x[1,i] = x[1,i]+deltax[i]
+    end
     for xx in x
       push!(xa,xx)
     end
@@ -121,10 +150,8 @@ function ssa{F}(x0::Vector{Int64},::Type{F},nu::Matrix{Int64},parms::Vector{Floa
   return(result)
 end
 
-
 "This takes a single argument of type `SSAResult` and returns a `DataFrame`."
 function ssa_data(s::SSAResult)
   df = hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
   df
 end
-
