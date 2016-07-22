@@ -2,7 +2,6 @@ site_name:        Gillespie.jl
 repo_url:         https://github.com/sdwfrost/Gillespie.jl
 site_description: Stochastic simulation algorithm in Julia
 site_author:      sdwfrost
-
 theme: readthedocs
 
 extra_css:
@@ -13,13 +12,12 @@ extra_javascript:
   - assets/mathjaxhelper.js
 
 markdown_extensions:
+  - codehilite
   - extra
   - tables
   - fenced_code
-  - mdx_math
 
 docs_dir: 'build'
 
 pages:
   - Home: index.md
-
