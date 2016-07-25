@@ -5,5 +5,6 @@ makedocs(modules=[Gillespie],
 
 deploydocs(
     deps = Deps.pip("mkdocs","python-markdown-math"),
-    repo = "github.com/sdwfrost/Gillespie.jl.git"
+    repo = "github.com/sdwfrost/Gillespie.jl.git",
+    julia = "release"
 )
