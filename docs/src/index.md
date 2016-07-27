@@ -85,7 +85,7 @@ data = ssa_data(result)
 
 This makes it straightforward to plot e.g. using `Gadfly`.
 
-```example 1
+```@example 1
 using Gadfly
 plot(data,
   layer(x="time",y="x1",Geom.step,Theme(default_color=colorant"red")),
