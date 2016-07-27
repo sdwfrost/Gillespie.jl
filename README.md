@@ -81,3 +81,11 @@ The speed of the SIR model in `Gillespie.jl` was compared to:
 Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) are available as gists.
 
 Julia performance for `Gillespie.jl` is slower than a handcoded version in Julia (which is itself comparable to C); as compiler performance improves, this gap should narrow.
+
+## Future work
+
+`Gillespie.jl` is under development, and pull requests are welcome. Future enhancements include:
+
+- Constrained simulations (where events are forced to occur at specific times)
+- Simulation via uniformization
+- Discrete time simulation
