@@ -247,19 +247,19 @@ result = ssa(x0,F,nu,parms,tf);</code></pre>
 
 
 <p>This makes it straightforward to plot e.g. using <code>Gadfly</code>.</p>
-<p><code>@example 1
-using Gadfly
+<pre class="codehilite"><code class="language-julia">using Gadfly
 plot(data,
-  layer(x="time",y="x1",Geom.step,Theme(default_color=colorant"red")),
-  layer(x="time",y="x2",Geom.step,Theme(default_color=colorant"blue")),
-  layer(x="time",y="x3",Geom.step,Theme(default_color=colorant"green")),
-  Guide.xlabel("Time"),
-  Guide.ylabel("Number"),
-  Guide.manual_color_key("Population",
-                            ["S", "I", "R"],
-                            ["red", "blue", "green"]),
-  Guide.title("SIR epidemiological model"))
-draw(SVG("plot.svg",6inch,4inch),ans); nothing # hide</code></p>
+  layer(x=&quot;time&quot;,y=&quot;x1&quot;,Geom.step,Theme(default_color=colorant&quot;red&quot;)),
+  layer(x=&quot;time&quot;,y=&quot;x2&quot;,Geom.step,Theme(default_color=colorant&quot;blue&quot;)),
+  layer(x=&quot;time&quot;,y=&quot;x3&quot;,Geom.step,Theme(default_color=colorant&quot;green&quot;)),
+  Guide.xlabel(&quot;Time&quot;),
+  Guide.ylabel(&quot;Number&quot;),
+  Guide.manual_color_key(&quot;Population&quot;,
+                            [&quot;S&quot;, &quot;I&quot;, &quot;R&quot;],
+                            [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;]),
+  Guide.title(&quot;SIR epidemiological model&quot;))</code></pre>
+
+
 <p><img alt="" src="./plot.svg" /></p>
 <p><a id='Application-programming-interface-1'></a></p>
 <h2 id="application-programming-interface">Application programming interface</h2>
@@ -352,5 +352,5 @@ draw(SVG("plot.svg",6inch,4inch),ans); nothing # hide</code></p>
 
 <!--
 MkDocs version : 0.15.3
-Build Date UTC : 2016-07-28 14:25:47.673776
+Build Date UTC : 2016-07-28 15:04:30.467843
 -->
