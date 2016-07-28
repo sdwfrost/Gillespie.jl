@@ -3,6 +3,7 @@
 
 [![Build Status](https://travis-ci.org/sdwfrost/Gillespie.jl.svg?branch=master)](https://travis-ci.org/sdwfrost/Gillespie.jl)
 [![Coverage Status](https://coveralls.io/repos/github/sdwfrost/Gillespie.jl/badge.svg?branch=master)](https://coveralls.io/github/sdwfrost/Gillespie.jl?branch=master)
+[![](https://img.shields.io/badge/docs-stable-blue.svg)](https://sdwfrost.github.io/Gillespie.jl/stable)
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://sdwfrost.github.io/Gillespie.jl/latest)
 [![Stories in Ready](https://badge.waffle.io/sdwfrost/Gillespie.jl.png?label=ready&title=Ready)](https://waffle.io/sdwfrost/Gillespie.jl)
 [![status](http://joss.theoj.org/papers/3cfdd80b93a9123b173e9617c1e6a238/status.svg)](http://joss.theoj.org/papers/3cfdd80b93a9123b173e9617c1e6a238)
