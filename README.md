@@ -1,5 +1,5 @@
 
-# Gillespie
+# Gillespie.jl
 
 [![Build Status](https://travis-ci.org/sdwfrost/Gillespie.jl.svg?branch=master)](https://travis-ci.org/sdwfrost/Gillespie.jl)
 [![Coverage Status](https://coveralls.io/repos/github/sdwfrost/Gillespie.jl/badge.svg?branch=master)](https://coveralls.io/github/sdwfrost/Gillespie.jl?branch=master)
@@ -79,7 +79,7 @@ The speed of an SIR model in `Gillespie.jl` was compared to:
 - A version using the R package `GillespieSSA`
 - Handcoded versions of the SIR model in Julia, R, and Rcpp
 
-1000 simulations were performed, and the time per simulation computed (lower is better). Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) with the code and benchmarks are available as gists.
+1000 simulations were performed, and the time per simulation computed (lower is better). Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) with the code and benchmarks are available as gists. A plain Julia file is also provided [in the benchmarks subdirectory](https://github.com/sdwfrost/Gillespie.jl/blob/master/benchmarks/sir-jl-benchmark.jl) for ease of benchmarking locally.
 
 |    Implementation                      | Time per simulation (ms) |
 | -------------------------------------- | ------------------------ |
@@ -89,6 +89,8 @@ The speed of an SIR model in `Gillespie.jl` was compared to:
 | Julia (Gillespie.jl)                   |          3.99            |
 | Julia (Gillespie.jl, passing object)   |          1.78            |
 | Julia (handcoded)                      |          1.20            |
+
+(smaller is better)
 
 Julia performance for `Gillespie.jl` is much better than `GillespieSSA`, and close to a handcoded version in Julia (which is itself comparable to Rcpp); as compiler performance improves, the gap in performance should narrow.
 
