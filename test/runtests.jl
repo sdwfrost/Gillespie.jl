@@ -2,7 +2,7 @@ using Gillespie
 using Base.Test
 
 include("../examples/lotka.jl")
-@test isequal(data[end,2],748)
+@test isequal(data[end,2],741)
 @test isequal(data[end,3],1048)
 
 include("../examples/logistic_growth.jl")
