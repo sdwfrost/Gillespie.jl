@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Stochastic simulation algorithm in Julia">
+  <meta name="author" content="sdwfrost">
+  
+  <title>Gillespie.jl</title>
+  
+
+  <link rel="shortcut icon" href="./img/favicon.ico">
+
+  
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="./css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="./css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="./css/highlight.css">
+  <link href="./assets/Documenter.css" rel="stylesheet">
+
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "None";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = "/";
+  </script>
+  
+  <script src="./js/jquery-2.1.1.min.js"></script>
+  <script src="./js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="./js/highlight.pack.js"></script>
+  <script src="./js/theme.js"></script> 
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="./assets/mathjaxhelper.js"></script>
+
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Gillespie.jl</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        <ul class="current">
+          
+            <li>
+    <li class="toctree-l1 current">
+        <a class="current" href=".">Home</a>
+        
+            <ul>
+            
+                <li class="toctree-l3"><a href="#gillespiejl-stochastic-simulation-algorithm-in-julia">Gillespie.jl: Stochastic Simulation Algorithm in Julia</a></li>
+                
+                    <li><a class="toctree-l4" href="#introduction">Introduction</a></li>
+                
+                    <li><a class="toctree-l4" href="#installation">Installation</a></li>
+                
+                    <li><a class="toctree-l4" href="#example">Example</a></li>
+                
+                    <li><a class="toctree-l4" href="#application-programming-interface">Application programming interface</a></li>
+                
+            
+            </ul>
+        
+    </li>
+<li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Gillespie.jl</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+        
+          <a href="https://github.com/sdwfrost/Gillespie.jl" class="icon icon-github"> Edit on GitHub</a>
+        
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <p><a id='Gillespie.jl:-Stochastic-Simulation-Algorithm-in-Julia-1'></a></p>
+<h1 id="gillespiejl-stochastic-simulation-algorithm-in-julia">Gillespie.jl: Stochastic Simulation Algorithm in Julia</h1>
+<ul>
+<li><a href=".#Gillespie.jl:-Stochastic-Simulation-Algorithm-in-Julia-1">Gillespie.jl: Stochastic Simulation Algorithm in Julia</a><ul>
+<li><a href=".#Introduction-1">Introduction</a></li>
+<li><a href=".#Installation-1">Installation</a></li>
+<li><a href=".#Example-1">Example</a></li>
+<li><a href=".#Application-programming-interface-1">Application programming interface</a></li>
+</ul>
+</li>
+</ul>
+<p><a id='Introduction-1'></a></p>
+<h2 id="introduction">Introduction</h2>
+<p><code>Gillespie.jl</code> provides an implementation of <a href="http://en.wikipedia.org/wiki/Gillespie_algorithm">Gillespie's direct method</a> for performing stochastic simulations, which are widely used in many fields, including systems biology and epidemiology. It borrows the basic interface (although none of the code) from the R library <a href="http://www.jstatsoft.org/v25/i12/paper"><code>GillespieSSA</code></a> by Mario Pineda-Krch, although <code>Gillespie.jl</code> only implements the standard exact method at present, whereas <code>GillespieSSA</code> also includes tau-leaping, <em>etc.</em>.</p>
+<p><a id='Installation-1'></a></p>
+<h2 id="installation">Installation</h2>
+<p><code>Gillespie.jl</code> can be installed from the Julia read-eval-print-loop (REPL) as follows.</p>
+<pre class="codehilite"><code class="language-julia">Pkg.add(&quot;Gillespie&quot;)</code></pre>
+
+
+<p><a id='Example-1'></a></p>
+<h2 id="example">Example</h2>
+<p>Let's take the 'standard' <a href="./(https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology#The_SIR_model_without_vital_dynamics)">susceptible-infected-recovered (SIR) model</a>, commonly used in epidemiology. A deterministic version of this model is as follows.</p>
+<p>
+<script type="math/tex; mode=display">\begin{align} \frac{dS(t)}{dt}  & = -\beta S(t) I(t) \cr \frac{dI(t)}{dt}  & = \beta S(t) I(t)- \gamma I(t) \cr \frac{dR(t)}{dt}  & = \gamma I(t) \end{align}</script>
+</p>
+<p>Let's consider a stochastic version of the SIR model.</p>
+<p>
+<script type="math/tex; mode=display">\begin{align} {\rm Transition} & \quad {\rm Rate} \cr S  \rightarrow S-1,\; I \rightarrow I+1 & \quad \beta S(t) I(t) \cr I  \rightarrow I-1,\; R \rightarrow R+1 & \quad \gamma I(t) \end{align}</script>
+</p>
+<p>We first need to load the library.</p>
+<pre class="codehilite"><code class="language-julia">using Gillespie;</code></pre>
+
+
+<p>We next need to define a function that given state variables <code>x</code> (type: <code>Array{Int64,1}</code>) and a vector of parameters (type: <code>Vector{Float64}</code>), returns a vector of rates of length <code>k</code> for different types of transitions. For this example, there are two transition functions, corresponding to infection and recovery.</p>
+<pre class="codehilite"><code class="language-julia">function F(x,parms)
+  (S,I,R) = x
+  (beta,gamma) = parms
+  infection = beta*S*I
+  recovery = gamma*I
+  [infection,recovery]
+end;</code></pre>
+
+
+<pre class="codehilite"><code>F (generic function with 1 method)</code></pre>
+
+
+<p>We define the states of the system - a <code>Vector{Int64}</code> of length <code>n</code> with the number of susceptible, infected, and recovered individuals.</p>
+<pre class="codehilite"><code class="language-julia">x0 = [9999,1,0];</code></pre>
+
+
+<pre class="codehilite"><code>3-element Array{Int64,1}:
+ 9999
+    1
+    0</code></pre>
+
+
+<p>To define the transitions, we define an <code>Array{Int64,k,n}</code> that denotes the changes to each of the <code>n</code> state variables for each of the <code>k</code> transitions. Infection results in a loss of 1 susceptible and a gain of one infected individual, while recovery is associated with a loss of one infected and a gain of one recovered.</p>
+<pre class="codehilite"><code class="language-julia">nu = [[-1 1 0];[0 -1 1]];</code></pre>
+
+
+<pre class="codehilite"><code>2x3 Array{Int64,2}:
+ -1   1  0
+  0  -1  1</code></pre>
+
+
+<p>Finally, we define the parameter values (in the order required by the function <code>F</code>), and the time we want the simulation to finish. The simulation will finish early if the propensity rates are zero.</p>
+<pre class="codehilite"><code class="language-julia">parms = [0.1/10000.0,0.05]
+tf = 1000.0;</code></pre>
+
+
+<pre class="codehilite"><code>1000.0</code></pre>
+
+
+<p>Given the above, the simulation can be run using the function <code>ssa</code>. It's usually a good idea to set a random number seed prior to simulation first.</p>
+<pre class="codehilite"><code class="language-julia">srand(1236)
+result = ssa(x0,F,nu,parms,tf);</code></pre>
+
+
+<pre class="codehilite"><code>Gillespie.SSAResult([0.0,11.7409,12.1425,17.647,18.0987,21.2081,22.2022,22.6326,26.1136,27.201  …  413.431,413.962,414.973,420.548,422.656,424.17,424.486,430.513,433.936,482.663],15704x3 Array{Int64,2}:
+ 9998  2     0
+ 9998  2     0
+ 9997  3     0
+ 9996  4     0
+ 9995  5     0
+ 9994  6     0
+ 9994  5     1
+ 9994  4     2
+ 9994  3     3
+ 9993  4     3
+    ⋮
+ 2149  6  7845
+ 2149  5  7846
+ 2149  4  7847
+ 2148  5  7847
+ 2148  4  7848
+ 2148  3  7849
+ 2148  2  7850
+ 2148  1  7851
+ 2148  0  7852,Gillespie.SSAStats(&quot;zeroprop&quot;,15703),Gillespie.SSAArgs([9999,1,0],ex-1.F,2x3 Array{Int64,2}:
+ -1   1  0
+  0  -1  1,[1.0e-5,0.05],1000.0))</code></pre>
+
+
+<p>This will return an object of type <code>SSAresult</code>. This can be converted to a <code>DataFrame</code> using the function <code>ssa_data</code>.</p>
+<pre class="codehilite"><code class="language-julia">data = ssa_data(result);</code></pre>
+
+
+<pre class="codehilite"><code>15704×4 DataFrames.DataFrame
+│ Row   │ time    │ x1   │ x2 │ x3   │
+├───────┼─────────┼──────┼────┼──────┤
+│ 1     │ 0.0     │ 9998 │ 2  │ 0    │
+│ 2     │ 11.7409 │ 9998 │ 2  │ 0    │
+│ 3     │ 12.1425 │ 9997 │ 3  │ 0    │
+│ 4     │ 17.647  │ 9996 │ 4  │ 0    │
+│ 5     │ 18.0987 │ 9995 │ 5  │ 0    │
+│ 6     │ 21.2081 │ 9994 │ 6  │ 0    │
+│ 7     │ 22.2022 │ 9994 │ 5  │ 1    │
+│ 8     │ 22.6326 │ 9994 │ 4  │ 2    │
+⋮
+│ 15696 │ 413.962 │ 2149 │ 6  │ 7845 │
+│ 15697 │ 414.973 │ 2149 │ 5  │ 7846 │
+│ 15698 │ 420.548 │ 2149 │ 4  │ 7847 │
+│ 15699 │ 422.656 │ 2148 │ 5  │ 7847 │
+│ 15700 │ 424.17  │ 2148 │ 4  │ 7848 │
+│ 15701 │ 424.486 │ 2148 │ 3  │ 7849 │
+│ 15702 │ 430.513 │ 2148 │ 2  │ 7850 │
+│ 15703 │ 433.936 │ 2148 │ 1  │ 7851 │
+│ 15704 │ 482.663 │ 2148 │ 0  │ 7852 │</code></pre>
+
+
+<p>This makes it straightforward to plot e.g. using <code>Gadfly</code>.</p>
+<p><code>@example 1
+using Gadfly
+plot(data,
+  layer(x="time",y="x1",Geom.step,Theme(default_color=colorant"red")),
+  layer(x="time",y="x2",Geom.step,Theme(default_color=colorant"blue")),
+  layer(x="time",y="x3",Geom.step,Theme(default_color=colorant"green")),
+  Guide.xlabel("Time"),
+  Guide.ylabel("Number"),
+  Guide.manual_color_key("Population",
+                            ["S", "I", "R"],
+                            ["red", "blue", "green"]),
+  Guide.title("SIR epidemiological model"))
+draw(SVG("plot.svg",6inch,4inch),ans); nothing # hide</code></p>
+<p><img alt="" src="./plot.svg" /></p>
+<p><a id='Application-programming-interface-1'></a></p>
+<h2 id="application-programming-interface">Application programming interface</h2>
+<p><a id='Types-1'></a></p>
+<h3 id="types">Types</h3>
+<p><a id='Gillespie.SSAStats' href='#Gillespie.SSAStats'>#</a>
+<strong><code>Gillespie.SSAStats</code></strong> &mdash; <em>Type</em>.</p>
+<p>A type storing the status at the end of a call to <code>ssa</code>:</p>
+<ul>
+<li><strong>termination_status</strong> : whether the simulation stops at the final time (<code>finaltime</code>) or early due to zero propensity function (<code>zeroprop</code>)</li>
+<li><strong>nsteps</strong> : the number of steps taken during the simulation.</li>
+</ul>
+<p><a id='Gillespie.SSAArgs' href='#Gillespie.SSAArgs'>#</a>
+<strong><code>Gillespie.SSAArgs</code></strong> &mdash; <em>Type</em>.</p>
+<p>A type storing the call to <code>ssa</code>:</p>
+<ul>
+<li><strong>x0</strong> : a <code>Vector</code> of <code>Int64</code>, representing the initial states of the system.</li>
+<li><strong>F</strong> : a <code>Function</code> or a callable type, which itself takes two arguments; x, a <code>Vector</code> of <code>Int64</code> representing the states, and parms, a <code>Vector</code> of <code>Float64</code> representing the parameters of the system.</li>
+<li><strong>nu</strong> : a <code>Matrix</code> of <code>Int64</code>, representing the transitions of the system, organised by row.</li>
+<li><strong>parms</strong> : a <code>Vector</code> of <code>Float64</code> representing the parameters of the system.</li>
+<li><strong>tf</strong> : the final simulation time (<code>Float64</code>)</li>
+</ul>
+<p><a id='Gillespie.SSAResult' href='#Gillespie.SSAResult'>#</a>
+<strong><code>Gillespie.SSAResult</code></strong> &mdash; <em>Type</em>.</p>
+<p>This type stores the output of <code>ssa</code>, and comprises of:</p>
+<ul>
+<li><strong>time</strong> : a <code>Vector</code> of <code>Float64</code>, containing the times of simulated events.</li>
+<li><strong>data</strong> : a <code>Matrix</code> of <code>Int64</code>, containing the simulated states.</li>
+<li><strong>stats</strong> : an instance of <code>SSAStats</code>.</li>
+<li><strong>args</strong> : arguments passed to <code>ssa</code>.</li>
+</ul>
+<p><a id='Functions-1'></a></p>
+<h3 id="functions">Functions</h3>
+<p><a id='Gillespie.ssa' href='#Gillespie.ssa'>#</a>
+<strong><code>Gillespie.ssa</code></strong> &mdash; <em>Function</em>.</p>
+<p>This function performs Gillespie's stochastic simulation algorithm. It takes the following arguments:</p>
+<ul>
+<li><strong>x0</strong> : a <code>Vector</code> of <code>Int64</code>, representing the initial states of the system.</li>
+<li><strong>F</strong> : a <code>Function</code> or a callable type, which itself takes two arguments; x, a <code>Vector</code> of <code>Int64</code> representing the states, and parms, a <code>Vector</code> of <code>Float64</code> representing the parameters of the system.</li>
+<li><strong>nu</strong> : a <code>Matrix</code> of <code>Int64</code>, representing the transitions of the system, organised by row.</li>
+<li><strong>parms</strong> : a <code>Vector</code> of <code>Float64</code> representing the parameters of the system.</li>
+<li><strong>tf</strong> : the final simulation time (<code>Float64</code>)</li>
+</ul>
+<p><a id='Gillespie.ssa_data' href='#Gillespie.ssa_data'>#</a>
+<strong><code>Gillespie.ssa_data</code></strong> &mdash; <em>Function</em>.</p>
+<p>This takes a single argument of type <code>SSAResult</code> and returns a <code>DataFrame</code>.</p>
+<p><a id='Gillespie.pfsample' href='#Gillespie.pfsample'>#</a>
+<strong><code>Gillespie.pfsample</code></strong> &mdash; <em>Function</em>.</p>
+<p>This function is a substitute for <code>StatsBase.sample(wv::WeightVec)</code>, which avoids recomputing the sum and size of the weight vector, as well as a type conversion of the propensity vector. It takes the following arguments:</p>
+<ul>
+<li><strong>w</strong> : an <code>Array{Float64,1}</code>, representing propensity function weights.</li>
+<li><strong>s</strong> : the sum of <code>w</code>.</li>
+<li><strong>n</strong> : the length of <code>w</code>.</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+	  
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+<div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+          <a href="https://github.com/sdwfrost/Gillespie.jl" class="icon icon-github" style="float: left; color: #fcfcfc"> GitHub</a>
+      
+      
+      
+    </span>
+</div>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 0.15.3
+Build Date UTC : 2016-07-28 14:22:36.013591
+-->
