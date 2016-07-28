@@ -1,10 +1,23 @@
-"A type storing the status at the end of a call to `ssa`."
+"A type storing the status at the end of a call to `ssa`:
+
+- **termination_status** : whether the simulation stops at the final time (`finaltime`) or early due to zero propensity function (`zeroprop`)
+- **nsteps** : the number of steps taken during the simulation.
+
+"
 type SSAStats
   termination_status::ASCIIString
   nsteps::Int64
 end
 
-"A type storing the call to `ssa`."
+"A type storing the call to `ssa`:
+
+- **x0** : a `Vector` of `Int64`, representing the initial states of the system.
+- **F** : a `Function` or a callable type, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms, a `Vector` of `Float64` representing the parameters of the system.
+- **nu** : a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
+- **parms** : a `Vector` of `Float64` representing the parameters of the system.
+- **tf** : the final simulation time (`Float64`)
+
+"
 type SSAArgs
   x0::Vector{Int64}
   F::Any

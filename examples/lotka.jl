@@ -18,8 +18,8 @@ result = ssa(x0,F,nu,parms,tf)
 data = ssa_data(result)
 
 p=plot(data,
-  layer(x="time",y="x1",Geom.step,Theme(default_color=color("red"))),
-  layer(x="time",y="x2",Geom.step,Theme(default_color=color("blue"))),
+  layer(x="time",y="x1",Geom.step,Theme(default_color=colorant"red")),
+  layer(x="time",y="x2",Geom.step,Theme(default_color=colorant"blue")),
   Guide.xlabel("Time"),
   Guide.ylabel("Number"),
   Guide.manual_color_key("Population",

@@ -74,13 +74,22 @@ An example of this approach is given [here](https://github.com/sdwfrost/Gillespi
 
 ## Benchmarks
 
-The speed of the SIR model in `Gillespie.jl` was compared to:
+The speed of an SIR model in `Gillespie.jl` was compared to:
 - A version using the R package `GillespieSSA`
 - Handcoded versions of the SIR model in Julia, R, and Rcpp
 
-Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) are available as gists.
+1000 simulations were performed, and the time per simulation computed (lower is better). Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) with the code and benchmarks are available as gists.
 
-Julia performance for `Gillespie.jl` is slower than a handcoded version in Julia (which is itself comparable to C); as compiler performance improves, this gap should narrow.
+|    Implementation      | Time per simulation (ms) |
+| ---------------------- | ------------------------ |
+| R (GillespieSSA)       |        894.25            |
+| R (handcoded)          |       1087.94            |
+| Rcpp (handcoded)       |          1.31            |
+| Julia (using function) |          3.99            |
+| Julia (using object)   |          1.78            |
+| Julia (handcoded)      |          1.20            |
+
+Julia performance for `Gillespie.jl` is much better than `GillespieSSA`, and close to a handcoded version in Julia (which is itself comparable to Rcpp); as compiler performance improves, the gap in performance should narrow.
 
 ## Future work
 
