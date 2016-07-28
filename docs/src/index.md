@@ -36,7 +36,7 @@ I  \rightarrow I-1,\; R \rightarrow R+1 & \quad \gamma I(t)
 We first need to load the library.
 
 ```@example 1
-using Gillespie
+using Gillespie;
 ```
 
 We next need to define a function that given state variables `x` (type: `Array{Int64,1}`) and a vector of parameters (type: `Vector{Float64}`), returns a vector of rates of length `k` for different types of transitions. For this example, there are two transition functions, corresponding to infection and recovery.
@@ -48,39 +48,39 @@ function F(x,parms)
   infection = beta*S*I
   recovery = gamma*I
   [infection,recovery]
-end
+end;
 ```
 
 We define the states of the system - a `Vector{Int64}` of length `n` with the number of susceptible, infected, and recovered individuals.
 
 ```@example 1
-x0 = [9999,1,0]
+x0 = [9999,1,0];
 ```
 
 To define the transitions, we define an `Array{Int64,k,n}` that denotes the changes to each of the `n` state variables for each of the `k` transitions. Infection results in a loss of 1 susceptible and a gain of one infected individual, while recovery is associated with a loss of one infected and a gain of one recovered.
 
 ```@example 1
-nu = [[-1 1 0];[0 -1 1]]
+nu = [[-1 1 0];[0 -1 1]];
 ```
 
 Finally, we define the parameter values (in the order required by the function `F`), and the time we want the simulation to finish. The simulation will finish early if the propensity rates are zero.
 
 ```@example 1
 parms = [0.1/10000.0,0.05]
-tf = 1000.0
+tf = 1000.0;
 ```
 
 Given the above, the simulation can be run using the function `ssa`. It's usually a good idea to set a random number seed prior to simulation first.
 
 ```@example 1
-srand(1234)
-result = ssa(x0,F,nu,parms,tf)
+srand(1236)
+result = ssa(x0,F,nu,parms,tf);
 ```
 
 This will return an object of type `SSAresult`. This can be converted to a `DataFrame` using the function `ssa_data`.
 
 ```@example 1
-data = ssa_data(result)
+data = ssa_data(result);
 ```
 
 This makes it straightforward to plot e.g. using `Gadfly`.
@@ -126,4 +126,8 @@ ssa
 
 ```@docs
 ssa_data
+```
+
+```@docs
+pfsample
 ```
