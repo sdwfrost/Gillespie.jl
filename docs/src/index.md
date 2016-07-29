@@ -85,7 +85,7 @@ data = ssa_data(result);
 
 This makes it straightforward to plot e.g. using `Gadfly`.
 
-```@example 1
+```julia
 using Gadfly
 plot(data,
   layer(x="time",y="x1",Geom.step,Theme(default_color=colorant"red")),
@@ -99,8 +99,6 @@ plot(data,
   Guide.title("SIR epidemiological model"))
 draw(SVG("plot.svg",6inch,4inch),ans); nothing # hide
 ```
-
-![](plot.svg)
 
 ## Application programming interface
 

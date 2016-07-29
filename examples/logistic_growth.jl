@@ -1,7 +1,6 @@
 using Gillespie
-using Gadfly
 
-function F(x,parms)
+function F_lg(x,parms)
   (N,) = x
   (b,d,K) = parms
   [b*N,(d+(b-d)*N/K)*N]
@@ -13,8 +12,7 @@ parms = [2.0,1.0,1000.0]
 tf = 15.0
 srand(1234)
 
-result = ssa(x0,F,nu,parms,tf)
+result = ssa(x0,F_lg,nu,parms,tf)
 
 data = ssa_data(result)
 
-p=plot(data,x="time",y="x1",Geom.step,Guide.xlabel("Time"), Guide.ylabel("X"), Guide.title("Logistic growth"))
