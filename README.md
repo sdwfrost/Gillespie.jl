@@ -102,3 +102,11 @@ Julia performance for `Gillespie.jl` is much better than `GillespieSSA`, and clo
 - Constrained simulations (where events are forced to occur at specific times)
 - Simulation via uniformization
 - Discrete time simulation
+
+## Citation
+
+If you use `Gillespie.jl` in a publication, please cite the following.
+
+- Frost, Simon D.W. (2016) Gillespie.jl: Stochastic Simulation Algorithm in Julia. *Journal of Open Source Software* 1(3) doi:0.21105/joss.00042
+
+A Bibtex entry can be found [here](http://www.doi2bib.org/#/doi/10.21105/joss.00042).
