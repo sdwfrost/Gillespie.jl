@@ -1,9 +1,9 @@
 using Gillespie
 
 function F_l(x,parms)
-  (Y1,Y2) = x
-  (c1,c2,c3) = parms
-  [c1*Y1,c2*Y1*Y2,c3*Y2]
+    (Y1,Y2) = x
+    (c1,c2,c3) = parms
+    [c1*Y1,c2*Y1*Y2,c3*Y2]
 end
 
 x0 = [1000,1000]

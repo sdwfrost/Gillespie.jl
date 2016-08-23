@@ -3,15 +3,15 @@ module Gillespie
 using Distributions
 using StatsBase
 using DataFrames
-VERSION < v"0.4-dev" && using Lexicon
+using Compat: UTF8String, view
 
 export
-	ssa,
-        ssa_data,
-        pfsample,
-	SSAArgs,
-	SSAStats,
-	SSAResult
+    ssa,
+    ssa_data,
+    pfsample,
+    SSAArgs,
+    SSAStats,
+    SSAResult
 
 include("SSA.jl")
 
