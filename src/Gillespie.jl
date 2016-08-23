@@ -3,6 +3,7 @@ module Gillespie
 using Distributions
 using StatsBase
 using DataFrames
+using Compat
 
 export
     ssa,

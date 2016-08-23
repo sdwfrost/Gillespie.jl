@@ -1,4 +1,5 @@
 using Gillespie
+using Compat
 
 function F_sir2(x,parms)
     (S,I,R) = x
@@ -14,7 +15,7 @@ parms = [0.1/1000.0,0.01]
 tf = 250.0
 srand(1234)
 immutable G_sir2; end
-call(::Type{G_sir2},x,parms) = F_sir2(x,parms)
+@compat (::Type{G_sir2})(x,parms) = F_sir2(x,parms)
 
 result = ssa(x0,G_sir2,nu,parms,tf)
 
