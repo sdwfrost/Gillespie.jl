@@ -1,9 +1,9 @@
 using Gillespie
 
 function F_lg(x,parms)
-  (N,) = x
-  (b,d,K) = parms
-  [b*N,(d+(b-d)*N/K)*N]
+    (N,) = x
+    (b,d,K) = parms
+    [b*N,(d+(b-d)*N/K)*N]
 end
 
 x0 = [10]

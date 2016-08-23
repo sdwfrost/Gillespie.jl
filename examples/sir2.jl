@@ -1,11 +1,11 @@
 using Gillespie
 
 function F_sir2(x,parms)
-  (S,I,R) = x
-  (beta,gamma) = parms
-  infection = beta*S*I
-  recovery = gamma*I
-  [infection,recovery]
+    (S,I,R) = x
+    (beta,gamma) = parms
+    infection = beta*S*I
+    recovery = gamma*I
+    [infection,recovery]
 end
 
 x0 = [999,1,0]

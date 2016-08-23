@@ -1,9 +1,9 @@
 using Gillespie
 
 function F_dd(x,parms)
-  (S1,S2,S3) = x
-  (c1,c2,c3,c4) = parms
-  [c1*S1,c2*S1*S1,c3*S2,c4*S2]
+    (S1,S2,S3) = x
+    (c1,c2,c3,c4) = parms
+    [c1*S1,c2*S1*S1,c3*S2,c4*S2]
 end
 
 x0 = [10000,0,0]
