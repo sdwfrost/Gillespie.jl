@@ -3,7 +3,7 @@ module Gillespie
 using Distributions
 using StatsBase
 using DataFrames
-using Compat
+using Compat: UTF8String, view
 
 export
     ssa,

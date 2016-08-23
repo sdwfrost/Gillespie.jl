@@ -5,7 +5,7 @@
 
 "
 type SSAStats
-    termination_status::Compat.UTF8String
+    termination_status::UTF8String
     nsteps::Int64
 end
 
@@ -71,18 +71,17 @@ This function performs Gillespie's stochastic simulation algorithm. It takes the
 - **tf** : the final simulation time (`Float64`)
 
 "
-function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
+function ssa(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf)
     # Set up time array
-    ta = Array(Float64,0)
+    ta = Vector{Float64}(0)
     t = 0.0
     push!(ta,t)
     # Set up initial x
     nstates = length(x0)
-    x = copy(x0)
-    x = reshape(x,1,nstates)
-    xa = vec(x)
+    x = x0'
+    xa = copy(x0)
     # Number of propensity functions
     numpf = size(nu,1)
     # Main loop
@@ -97,74 +96,26 @@ function ssa(x0::Vector{Int64},F::Function,nu::Matrix{Int64},parms::Vector{Float
             break
         end
         dt = rand(Exponential(1/sumpf))
-        t = t + dt
+        t += dt
         push!(ta,t)
         # Update event
         ev = pfsample(pf,sumpf,numpf)
-        deltax = nu[ev,:]
+        deltax = view(nu,ev,:)
         for i in 1:nstates
-            @inbounds x[1,i] = x[1,i]+deltax[i]
+            @inbounds x[1,i] += deltax[i]
         end
         for xx in x
             push!(xa,xx)
         end
         # update nsteps
-        nsteps = nsteps + 1
+        nsteps += 1
     end
     stats = SSAStats(termination_status,nsteps)
     xar = transpose(reshape(xa,length(x),nsteps+1))
-    result = SSAResult(ta,xar,stats,args)
-    return(result)
-end
-
-function ssa{F}(x0::Vector{Int64},::Type{F},nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
-    # Args
-    args = SSAArgs(x0,F,nu,parms,tf)
-    # Set up time array
-    ta = Array(Float64,0)
-    t = 0.0
-    push!(ta,t)
-    # Set up initial x
-    nstates = length(x0)
-    x = copy(x0)
-    x = reshape(x,1,nstates)
-    xa = vec(x)
-    # Number of propensity functions
-    numpf = size(nu,1)
-    # Main loop
-    termination_status = "finaltime"
-    nsteps = 0
-    while t <= tf
-        pf = F(x,parms)
-        # Update time
-        sumpf = sum(pf)
-        if sumpf == 0.0
-            termination_status = "zeroprop"
-            break
-        end
-        dt = rand(Exponential(1/sumpf))
-        t = t + dt
-        push!(ta,t)
-        # Update event
-        ev = pfsample(pf,sumpf,numpf)
-        deltax = nu[ev,:]
-        for i in 1:nstates
-            @inbounds x[1,i] = x[1,i]+deltax[i]
-        end
-        for xx in x
-            push!(xa,xx)
-        end
-        # update nsteps
-        nsteps = nsteps + 1
-    end
-    stats = SSAStats(termination_status,nsteps)
-    xar = transpose(reshape(xa,length(x),nsteps+1))
-    result = SSAResult(ta,xar,stats,args)
-    return(result)
+    return SSAResult(ta,xar,stats,args)
 end
 
 "This takes a single argument of type `SSAResult` and returns a `DataFrame`."
 function ssa_data(s::SSAResult)
-    df = hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
-    df
+    hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
 end
