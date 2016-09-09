@@ -1,7 +1,6 @@
 module Gillespie
 
 using Distributions
-using StatsBase
 using DataFrames
 using Compat: UTF8String, view
 
