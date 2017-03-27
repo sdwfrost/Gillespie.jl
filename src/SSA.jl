@@ -24,6 +24,7 @@ type SSAArgs
     nu::Matrix{Int64}
     parms::Vector{Float64}
     tf::Float64
+    alg::Symbol
 end
 
 "
@@ -71,9 +72,9 @@ This function performs Gillespie's stochastic simulation algorithm. It takes the
 - **tf** : the final simulation time (`Float64`)
 
 "
-function ssa(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
+function gillespie(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
     # Args
-    args = SSAArgs(x0,F,nu,parms,tf)
+    args = SSAArgs(x0,F,nu,parms,tf.:gillespie)
     # Set up time array
     ta = Vector{Float64}(0)
     t = 0.0
@@ -109,6 +110,56 @@ function ssa(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{
         end
         # update nsteps
         nsteps += 1
+    end
+    stats = SSAStats(termination_status,nsteps)
+    xar = transpose(reshape(xa,length(x),nsteps+1))
+    return SSAResult(ta,xar,stats,args)
+end
+
+function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64)
+    # Args
+    args = SSAArgs(x0,F,nu,parms,tf,:jensen)
+    # Set up time array
+    ta = Vector{Float64}(0)
+    t = 0.0
+    push!(ta,t)
+    # Set up initial x
+    nstates = length(x0)
+    x = x0'
+    xa = copy(x0)
+    # Number of propensity functions; one for no event
+    numpf = size(nu,1)+1
+    # Main loop
+    termination_status = "finaltime"
+    nsteps = 0
+    while t <= tf
+        pf = F(x,parms)
+        # Update time
+        sumpf = sum(pf)
+        if sumpf == 0.0
+            termination_status = "zeroprop"
+            break
+        end
+        if sumpf > max_rate
+            termination_status = "upper_bound_exceeded"
+            break
+        end
+        dt = rand(Exponential(1/max_rate))
+        t += dt
+        push!(ta,t)
+        # Update event
+        ev = pfsample([pf max_rate-sumpf],max_rate,numpf+1)
+        if ev < numpf
+          deltax = view(nu,ev,:)
+          for i in 1:nstates
+              @inbounds x[1,i] += deltax[i]
+          end
+          for xx in x
+            push!(xa,xx)
+          end
+          # update nsteps
+          nsteps += 1
+        end
     end
     stats = SSAStats(termination_status,nsteps)
     xar = transpose(reshape(xa,length(x),nsteps+1))
