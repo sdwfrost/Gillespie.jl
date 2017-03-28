@@ -12,7 +12,7 @@ parms = [10.0,0.01,10.0]
 tf = 2.0
 srand(1234)
 
-result = ssa(x0,F_l,nu,parms,tf)
+result = gillespie(x0,F_l,nu,parms,tf)
 
 data = ssa_data(result)
 
