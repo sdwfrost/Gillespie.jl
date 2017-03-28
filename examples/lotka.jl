@@ -12,7 +12,11 @@ parms = [10.0,0.01,10.0]
 tf = 2.0
 srand(1234)
 
-result = gillespie(x0,F_l,nu,parms,tf)
+gillespie_result = ssa(x0,F_l,nu,parms,tf)
+gillespie_data = ssa_data(gillespie_result)
 
-data = ssa_data(result)
+jensen_result = ssa(x0,F_l,nu,parms,tf,algo=:jensen,max_rate=100000.0,all_jumps=false)
+jensen_data = ssa_data(jensen_result)
 
+jensen_alljumps_result = ssa(x0,F_l,nu,parms,tf,algo=:jensen,max_rate=100000.0,all_jumps=true)
+jensen_alljumps_data = ssa_data(jensen_alljumps_result)
