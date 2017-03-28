@@ -6,6 +6,8 @@ using Compat: UTF8String, view
 
 export
     ssa,
+    gillespie,
+    jensen
     ssa_data,
     pfsample,
     SSAArgs,
