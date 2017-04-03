@@ -15,14 +15,21 @@
 
 ## Statement of need
 
-This is an implementation of [Gillespie's direct method](http://en.wikipedia.org/wiki/Gillespie_algorithm) for performing stochastic simulations, which are widely used in many fields, including systems biology and epidemiology. It borrows the basic interface (although none of the code) from the R library [`GillespieSSA`](http://www.jstatsoft.org/v25/i12/paper) by Mario Pineda-Krch, although `Gillespie.jl` only implements the standard exact method at present, whereas `GillespieSSA` also includes tau-leaping, *etc.*. It is intended to offer performance on par with hand-coded C code; please file an issue if you find an example that is significantly slower (2 to 5 times) than C.
+This is an implementation of [Gillespie's direct method](http://en.wikipedia.org/wiki/Gillespie_algorithm) as well as [uniformization/Jensen's method](https://en.wikipedia.org/wiki/Uniformization_(probability_theory)) for performing stochastic simulations, which are widely used in many fields, including systems biology and epidemiology. It borrows the basic interface (although none of the code) from the R library [`GillespieSSA`](http://www.jstatsoft.org/v25/i12/paper) by Mario Pineda-Krch, although `Gillespie.jl` only implements exact methods at present, whereas `GillespieSSA` also includes tau-leaping, *etc.*. It is intended to offer performance on par with hand-coded C code; please file an issue if you find an example that is significantly slower (2 to 5 times) than C.
 
 ## Installation
 
-```Gillespie.jl``` can be installed from the Julia REPL using the following command.
+The stable release of ```Gillespie.jl``` can be installed from the Julia REPL using the following command.
 
 ```julia
 Pkg.add("Gillespie")
+```
+
+The development version from this repository can be installed as follows.
+
+```julia
+Pkg.clone("https://github.com/sdwfrost/Gillespie.jl")
+Pkg.build("Gillespie")
 ```
 
 ## Example usage
@@ -51,16 +58,20 @@ result = ssa(x0,F,nu,parms,tf)
 
 data = ssa_data(result)
 
+plot_theme = Theme(
+    panel_fill=colorant"white",
+    default_color=colorant"black"
+)
 p=plot(data,
-  layer(x="time",y="x1",Geom.step,Theme(default_color=color("red"))),
-  layer(x="time",y="x2",Geom.step,Theme(default_color=color("blue"))),
-  layer(x="time",y="x3",Geom.step,Theme(default_color=color("green"))),
-  Guide.xlabel("Time"),
-  Guide.ylabel("Number"),
-  Guide.manual_color_key("Population",
-                            ["S", "I", "R"],
-                            ["red", "blue", "green"]),
-  Guide.title("SIR epidemiological model"))
+    layer(x=:time,y=:x1,Geom.step,Theme(default_color=colorant"red")),
+    layer(x=:time,y=:x2,Geom.step,Theme(default_color=colorant"orange")),
+    layer(x=:time,y=:x3,Geom.step,Theme(default_color=colorant"blue")),
+    Guide.xlabel("Time"),
+    Guide.ylabel("Number"),
+    Guide.title("SSA simulation"),
+    Guide.manual_color_key("Subpopulation",["S","I","R"],["red","orange","blue"]),
+    plot_theme
+)
 ```
 
 ![SIR](https://github.com/sdwfrost/Gillespie.jl/blob/master/sir.png)
