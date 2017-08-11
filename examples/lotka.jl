@@ -15,8 +15,8 @@ srand(1234)
 gillespie_result = ssa(x0,F_l,nu,parms,tf)
 gillespie_data = ssa_data(gillespie_result)
 
-jensen_result = ssa(x0,F_l,nu,parms,tf,algo=:jensen,max_rate=100000.0,all_jumps=false)
+jensen_result = ssa(x0,F_l,nu,parms,tf,algo=:jensen,max_rate=100000.0,thin=true)
 jensen_data = ssa_data(jensen_result)
 
-jensen_alljumps_result = ssa(x0,F_l,nu,parms,tf,algo=:jensen,max_rate=100000.0,all_jumps=true)
+jensen_alljumps_result = ssa(x0,F_l,nu,parms,tf,algo=:jensen,max_rate=100000.0,thin=false)
 jensen_alljumps_data = ssa_data(jensen_alljumps_result)
