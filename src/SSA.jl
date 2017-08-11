@@ -129,7 +129,7 @@ This function performs the true jump method for piecewise deterministic Markov p
 "
 function tjm(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
     # Args
-    args = SSAArgs(x0,F,nu,parms,tf,:tvc,true)
+    args = SSAArgs(x0,F,nu,parms,tf,:tjm,true)
     # Set up time array
     ta = Vector{Float64}(0)
     t = 0.0
