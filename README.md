@@ -80,12 +80,11 @@ Julia versions of the examples used in [`GillespieSSA`](http://www.jstatsoft.org
 
 ## Jensen's method or uniformization
 
-The development version of ```Gillespie.jl``` includes code to simulate via uniformization (a.k.a. Jensen's method); the API is the same as for the SSA, with the addition of two arguments:
+The development version of ```Gillespie.jl``` includes code to simulate via uniformization (a.k.a. Jensen's method); the API is the same as for the SSA, with the addition of **max_rate**, the maximum rate (`Float64`). Optionally, another argument, **thin** (`Bool`), can be set to `false` to return all the jumps (including the fictitious ones), and saves a bit of time by pre-allocating the time vector. This code is under development at present, and may change. Time-varying rates can be accommodated by passing a rate function with three arguments, `F(x,parms,t)`, where `x` is the discrete state, `parms` are the parameters, and `t` is the simulation time.
 
-- **max_rate**: the maximum rate (`Float64`).
-- **tvc**: a `Bool` representing whether the system has time-varying coefficients.
+## The true jump method
 
-There are two versions of this function, `jensen` and `jensen_alljumps`; the latter returns all the jumps (including the fictitious ones), and saves a bit of time by pre-allocating the time vector. This code is under development at present, and may change.
+The development version of ```Gillespie.jl``` also includes code to simulate assuming time-varying rates via the true jump method; the API is the same as for the SSA, with the exception that the rate function must have three arguments, as described above.
 
 ## Performance considerations
 

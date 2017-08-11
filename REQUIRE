@@ -3,3 +3,5 @@ Compat
 Distributions
 StatsBase
 DataFrames
+QuadGK
+Roots

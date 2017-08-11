@@ -1,6 +1,6 @@
 using Gillespie
 
-function F_sir(x,parms)
+function F_sir(x,parms,t)
     (S,I,R) = x
     (beta,gamma) = parms
     infection = beta*S*I
@@ -14,6 +14,6 @@ parms = [0.1/1000.0,0.01]
 tf = 250.0
 srand(1234)
 
-result = jensen(x0,F_sir,nu,parms,tf,35.0)
+result = tjm(x0,F_sir,nu,parms,tf)
 
 data = ssa_data(result)
