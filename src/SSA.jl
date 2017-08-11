@@ -120,13 +120,14 @@ end
 This function performs stochastic simulation using thinning/uniformization/Jensen's method, returning only the thinned jumps. It takes the following arguments:
 
 - **x0** : a `Vector` of `Int64`, representing the initial states of the system.
-- **F** : a `Function` or a callable type, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms, a `Vector` of `Float64` representing the parameters of the system.
+- **F** : a `Function` or a callable type, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms, a `Vector` of `Float64` representing the parameters of the system. In the case of time-varying systems, a third argument, a `Float64` representing the time of the system should be added
 - **nu** : a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 - **max_rate**: the maximum rate (`Float64`).
+- **tvc**: a `Bool` representing whether the system has time-varying coefficients.
 "
-function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64)
+function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64,tvc::Bool)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:jensen)
     # Set up time array
@@ -143,7 +144,13 @@ function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vect
     termination_status = "finaltime"
     nsteps = 0
     while t <= tf
-        pf = F(x,parms)
+        dt = rand(Exponential(1/max_rate))
+        t += dt
+        if tvc
+          pf = F(x,parms,t)
+        else
+          pf = F(x,parms)
+        end
         # Update time
         sumpf = sum(pf)
         if sumpf == 0.0
@@ -154,8 +161,6 @@ function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vect
             termination_status = "upper_bound_exceeded"
             break
         end
-        dt = rand(Exponential(1/max_rate))
-        t += dt
         # Update event
         ev = pfsample([pf; max_rate-sumpf],max_rate,numpf+1)
         if ev < numpf
@@ -180,13 +185,14 @@ end
 This function performs stochastic simulation using thinning/uniformization/Jensen's method, returning all the jumps, both real and 'virtual'. It takes the following arguments:
 
 - **x0** : a `Vector` of `Int64`, representing the initial states of the system.
-- **F** : a `Function` or a callable type, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms, a `Vector` of `Float64` representing the parameters of the system.
+- **F** : a `Function` or a callable type, which itself takes two arguments; x, a `Vector` of `Int64` representing the states, and parms, a `Vector` of `Float64` representing the parameters of the system. In the case of time-varying systems, a third argument, a `Float64` representing the time of the system should be added
 - **nu** : a `Matrix` of `Int64`, representing the transitions of the system, organised by row.
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 - **max_rate**: the maximum rate (`Float64`).
+- **tvc**: a `Bool` representing whether the system has time-varying coefficients.
 "
-function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64)
+function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64,tvc::Bool)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:jensen)
     # Set up time array
@@ -208,10 +214,14 @@ function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},pa
     numpf = size(nu,1)+1
     # Main loop
     termination_status = "finaltime"
-    t = ta[1]
     k=1 # step counter
     while k <= nsteps
-        pf = F(x,parms)
+        if tvc
+          t=ta[k]
+          pf=F(x,parms,t)
+        else
+          pf = F(x,parms)
+        end
         sumpf = sum(pf)
         if sumpf == 0.0
             termination_status = "zeroprop"

@@ -78,14 +78,25 @@ p=plot(data,
 
 Julia versions of the examples used in [`GillespieSSA`](http://www.jstatsoft.org/v25/i12/paper) are given in the [examples](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples) directory.
 
-Passing functions as arguments in Julia (currently) incurs a performance penalty. One can circumvent this by passing an immutable object, with ```call``` overloaded, as follows.
+## Jensen's method or uniformization
+
+The development version of ```Gillespie.jl``` includes code to simulate via uniformization (a.k.a. Jensen's method); the API is the same as for the SSA, with the addition of two arguments:
+
+- **max_rate**: the maximum rate (`Float64`).
+- **tvc**: a `Bool` representing whether the system has time-varying coefficients.
+
+There are two versions of this function, `jensen` and `jensen_alljumps`; the latter returns all the jumps (including the fictitious ones), and saves a bit of time by pre-allocating the time vector. This code is under development at present, and may change.
+
+## Performance considerations
+
+Passing functions as arguments in Julia v0.4 incurs a performance penalty. One can circumvent this by passing an immutable object, with ```call``` overloaded, as follows.
 
 ```julia
 immutable G; end
 call(::Type{G},x,parms) = F(x,parms)
 ```
 
-An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl).
+An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl). This is the default behaviour in v0.5 and above.
 
 ## Benchmarks
 
@@ -113,7 +124,6 @@ Julia performance for `Gillespie.jl` is much better than `GillespieSSA`, and clo
 `Gillespie.jl` is under development, and pull requests are welcome. Future enhancements include:
 
 - Constrained simulations (where events are forced to occur at specific times)
-- Simulation via uniformization
 - Discrete time simulation
 
 ## Citation
