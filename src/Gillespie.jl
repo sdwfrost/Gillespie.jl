@@ -10,7 +10,7 @@ export
     ssa,
     gillespie,
     jensen,
-    tjm,
+    truejump,
     ssa_data,
     pfsample,
     SSAArgs,
