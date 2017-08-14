@@ -127,7 +127,7 @@ This function performs the true jump method for piecewise deterministic Markov p
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 "
-function tjm(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
+function truejump(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:tjm,true)
     # Set up time array
@@ -192,7 +192,7 @@ function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vect
     end
     tvc=true
     try
-      F(x,parms,0.0)
+      F(x0,parms,0.0)
     catch
       tvc=false
     end
@@ -263,7 +263,7 @@ function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},pa
     # Args
     tvc=true
     try
-      F(x,parms,0.0)
+      F(x0,parms,0.0)
     catch
       tvc=false
     end
