@@ -14,6 +14,6 @@ parms = [0.1/1000.0,0.01]
 tf = 250.0
 srand(1234)
 
-result = tjm(x0,F_sir,nu,parms,tf)
+result = truejump(x0,F_sir,nu,parms,tf)
 
 data = ssa_data(result)
