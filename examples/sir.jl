@@ -17,4 +17,3 @@ srand(1234)
 result = ssa(x0,F_sir,nu,parms,tf)
 
 data = ssa_data(result)
-
