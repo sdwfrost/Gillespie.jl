@@ -2,7 +2,7 @@ module Gillespie
 
 using Distributions
 using DataFrames
-using Compat: UTF8String, view
+using Compat: view
 
 export
     ssa,
