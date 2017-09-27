@@ -2,9 +2,9 @@ module Gillespie
 
 using Distributions
 using DataFrames
+using Compat: view
 using QuadGK
 using Roots
-using Compat: UTF8String, view
 
 export
     ssa,

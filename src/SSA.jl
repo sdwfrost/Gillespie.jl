@@ -5,7 +5,7 @@
 
 "
 type SSAStats
-    termination_status::UTF8String
+    termination_status::String
     nsteps::Int64
 end
 
