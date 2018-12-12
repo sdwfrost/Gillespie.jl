@@ -4,7 +4,7 @@
 - **nsteps** : the number of steps taken during the simulation.
 
 "
-type SSAStats
+struct SSAStats
     termination_status::String
     nsteps::Int64
 end
@@ -19,7 +19,7 @@ end
 - **alg** : the algorithm used (`Symbol`, either `:gillespie`, `jensen`, or `tjc`).
 - **tvc** : whether rates are time varying.
 "
-type SSAArgs
+struct SSAArgs
     x0::Vector{Int64}
     F::Any
     nu::Matrix{Int64}
@@ -38,7 +38,7 @@ This type stores the output of `ssa`, and comprises of:
 - **args** : arguments passed to `ssa`.
 
 "
-type SSAResult
+struct SSAResult
     time::Vector{Float64}
     data::Matrix{Int64}
     stats::SSAStats
@@ -78,7 +78,7 @@ function gillespie(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::V
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:gillespie,false)
     # Set up time array
-    ta = Vector{Float64}(0)
+    ta = Vector{Float64}()
     t = 0.0
     push!(ta,t)
     # Set up initial x
@@ -131,7 +131,7 @@ function truejump(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Ve
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:tjm,true)
     # Set up time array
-    ta = Vector{Float64}(0)
+    ta = Vector{Float64}()
     t = 0.0
     push!(ta,t)
     # Set up initial x
@@ -199,7 +199,7 @@ function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vect
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:jensen,tvc)
     # Set up time array
-    ta = Vector{Float64}(0)
+    ta = Vector{Float64}()
     t = 0.0
     push!(ta,t)
     # Set up initial x
@@ -270,7 +270,7 @@ function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},pa
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:jensen,tvc)
     # Set up time array
-    ta = Vector{Float64}(0)
+    ta = Vector{Float64}()
     t = 0.0
     push!(ta,t)
     while t < tf
@@ -282,7 +282,7 @@ function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},pa
     # Set up initial x
     nstates = length(x0)
     x = x0'
-    xa = Array{Int64,1}((nsteps+1)*nstates)
+    xa = Array{Int64,1}(undef, (nsteps+1)*nstates)
     xa[1:nstates] = x
     # Number of propensity functions; one for no event
     numpf = size(nu,1)+1

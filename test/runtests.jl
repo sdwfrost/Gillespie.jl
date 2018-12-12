@@ -1,5 +1,5 @@
 using Gillespie
-using Base.Test
+using Test
 
 include("../examples/lotka.jl")
 @test isequal(gillespie_data[end,2],741)
