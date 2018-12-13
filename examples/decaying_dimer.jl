@@ -1,4 +1,5 @@
 using Gillespie
+import Random: seed!
 
 function F_dd(x,parms)
     (S1,S2,S3) = x
@@ -10,9 +11,8 @@ x0 = [10000,0,0]
 nu = [[-1 0 0];[-2 1 0];[2 -1 0];[0 -1 1]]
 parms = [1.0,0.002,0.5,0.04]
 tf = 10.0
-srand(1234)
+seed!(1234)
 
 result = ssa(x0,F_dd,nu,parms,tf)
 
 data = ssa_data(result)
-

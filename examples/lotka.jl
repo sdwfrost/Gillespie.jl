@@ -1,4 +1,5 @@
 using Gillespie
+import Random: seed!
 
 function F_l(x,parms)
     (Y1,Y2) = x
@@ -10,7 +11,7 @@ x0 = [1000,1000]
 nu = [[1 0];[-1 1];[0 -1]]
 parms = [10.0,0.01,10.0]
 tf = 2.0
-srand(1234)
+seed!(1234)
 
 gillespie_result = ssa(x0,F_l,nu,parms,tf)
 gillespie_data = ssa_data(gillespie_result)

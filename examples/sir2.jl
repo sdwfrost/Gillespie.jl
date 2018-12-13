@@ -1,5 +1,6 @@
 using Gillespie
 using Compat
+import Random: seed!
 
 function F_sir2(x,parms)
     (S,I,R) = x
@@ -13,11 +14,8 @@ x0 = [999,1,0]
 nu = [[-1 1 0];[0 -1 1]]
 parms = [0.1/1000.0,0.01]
 tf = 250.0
-srand(1234)
-immutable G_sir2; end
-@compat (::Type{G_sir2})(x,parms) = F_sir2(x,parms)
+seed!(1234)
 
-result = ssa(x0,G_sir2,nu,parms,tf)
+result = ssa(x0,F_sir2,nu,parms,tf)
 
 data = ssa_data(result)
-
