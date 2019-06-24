@@ -2,7 +2,6 @@ module Gillespie
 
 using Distributions
 using DataFrames
-using Compat: view
 using QuadGK
 using Roots
 
