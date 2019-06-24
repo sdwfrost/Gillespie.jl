@@ -83,7 +83,7 @@ function gillespie(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::V
     push!(ta,t)
     # Set up initial x
     nstates = length(x0)
-    x = x0'
+    x = copy(x0')
     xa = copy(x0)
     # Number of propensity functions
     numpf = size(nu,1)
@@ -204,7 +204,7 @@ function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vect
     push!(ta,t)
     # Set up initial x
     nstates = length(x0)
-    x = x0'
+    x = copy(x0')
     xa = copy(x0)
     # Number of propensity functions; one for no event
     numpf = size(nu,1)+1
@@ -281,7 +281,7 @@ function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},pa
     nsteps=length(ta)-1
     # Set up initial x
     nstates = length(x0)
-    x = x0'
+    x = copy(x0')
     xa = Array{Int64,1}(undef, (nsteps+1)*nstates)
     xa[1:nstates] = x
     # Number of propensity functions; one for no event
