@@ -89,19 +89,23 @@ The development version of ```Gillespie.jl``` also includes code to simulate ass
 ## Benchmarks
 
 The speed of an SIR model in `Gillespie.jl` was compared to:
+
 - A version using the R package `GillespieSSA`
 - Handcoded versions of the SIR model in Julia, R, and Rcpp
+- [DifferentialEquations.jl's](https://docs.sciml.ai/latest/) jump interface.
 
 1000 simulations were performed, and the time per simulation computed (lower is better). Benchmarks were run on a Mac Pro (Late 2013), with 3 Ghz 8-core Intel Xeon E3, 64GB 1866 Mhz RAM, running OSX v 10.11.3 (El Capitan), using Julia v0.4.5 and R v.3.3. Jupyter notebooks for [Julia](https://gist.github.com/sdwfrost/8a0e926a5e16d7d104bd2bc1a5f9ed0b) and [R](https://gist.github.com/sdwfrost/afed3b881ef5742623b905a539197c7a) with the code and benchmarks are available as gists. A plain Julia file is also provided [in the benchmarks subdirectory](https://github.com/sdwfrost/Gillespie.jl/blob/master/benchmarks/sir-jl-benchmark.jl) for ease of benchmarking locally.
 
-|    Implementation                      | Time per simulation (ms) |
-| -------------------------------------- | ------------------------ |
-| R (GillespieSSA)                       |        894.25            |
-| R (handcoded)                          |       1087.94            |
-| Rcpp (handcoded)                       |          1.31            |
-| Julia (Gillespie.jl)                   |          3.99            |
-| Julia (Gillespie.jl, passing object)   |          1.78            |
-| Julia (handcoded)                      |          1.20            |
+|    Implementation                          | Time per simulation (ms) |
+| -------------------------------------------| ------------------------ |
+| R (GillespieSSA)                           |          463             |
+| R (handcoded)                              |          785             |
+| Rcpp (handcoded)                           |          1.40            |
+| Julia (Gillespie.jl)                       |          1.69            |
+| Julia (Gillespie.jl, Static)               |          0.89            |
+| Julia (DifferentialEquations.jl)           |          1.14            |
+| Julia (DifferentialEquations.jl, Static)   |          0.72            |
+| Julia (handcoded)                          |          0.49            |
 
 (smaller is better)
 
