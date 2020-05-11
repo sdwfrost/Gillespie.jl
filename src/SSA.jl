@@ -19,11 +19,11 @@ end
 - **alg** : the algorithm used (`Symbol`, either `:gillespie`, `jensen`, or `tjc`).
 - **tvc** : whether rates are time varying.
 "
-struct SSAArgs
-    x0::Vector{Int64}
-    F::Any
-    nu::Matrix{Int64}
-    parms::Vector{Float64}
+struct SSAArgs{X,Ftype,N,P}
+    x0::X
+    F::Ftype
+    nu::N
+    parms::P
     tf::Float64
     alg::Symbol
     tvc::Bool
@@ -54,7 +54,7 @@ This function is a substitute for `StatsBase.sample(wv::WeightVec)`, which avoid
 - **n** : the length of `w`.
 
 "
-function pfsample(w::Array{Float64,1},s::Float64,n::Int64)
+function pfsample(w::AbstractArray{Float64,1},s::Float64,n::Int64)
     t = rand() * s
     i = 1
     cw = w[1]
@@ -74,7 +74,7 @@ This function performs Gillespie's stochastic simulation algorithm. It takes the
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 "
-function gillespie(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
+function gillespie(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:gillespie,false)
     # Set up time array
@@ -84,7 +84,7 @@ function gillespie(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::V
     # Set up initial x
     nstates = length(x0)
     x = copy(x0')
-    xa = copy(x0)
+    xa = copy(Array(x0))
     # Number of propensity functions
     numpf = size(nu,1)
     # Main loop
@@ -103,9 +103,13 @@ function gillespie(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::V
         push!(ta,t)
         # Update event
         ev = pfsample(pf,sumpf,numpf)
-        deltax = view(nu,ev,:)
-        for i in 1:nstates
-            @inbounds x[1,i] += deltax[i]
+        if x isa SVector
+            @inbounds x[1] += nu[ev,:]
+        else
+            deltax = view(nu,ev,:)
+            for i in 1:nstates
+                @inbounds x[1,i] += deltax[i]
+            end
         end
         for xx in x
             push!(xa,xx)
@@ -127,7 +131,7 @@ This function performs the true jump method for piecewise deterministic Markov p
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 "
-function truejump(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64)
+function truejump(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:tjm,true)
     # Set up time array
@@ -161,9 +165,13 @@ function truejump(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Ve
         push!(ta,t)
         # Update event
         ev = pfsample(pf,sumpf,numpf)
-        deltax = view(nu,ev,:)
-        for i in 1:nstates
-            @inbounds x[1,i] += deltax[i]
+        if x isa SVector
+            @inbounds x[1] += nu[ev,:]
+        else
+            deltax = view(nu,ev,:)
+            for i in 1:nstates
+                @inbounds x[1,i] += deltax[i]
+            end
         end
         for xx in x
             push!(xa,xx)
@@ -186,9 +194,9 @@ This function performs stochastic simulation using thinning/uniformization/Jense
 - **tf** : the final simulation time (`Float64`).
 - **max_rate**: the maximum rate (`Float64`).
 "
-function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64,thin::Bool=true)
+function jensen(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64,thin::Bool=true)
     if thin==false
-      return jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64)
+      return jensen_alljumps(x0::AbstractVector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64)
     end
     tvc=true
     try
@@ -232,10 +240,14 @@ function jensen(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vect
         # Update event
         ev = pfsample([pf; max_rate-sumpf],max_rate,numpf+1)
         if ev < numpf
-          deltax = view(nu,ev,:)
-          for i in 1:nstates
-              @inbounds x[1,i] += deltax[i]
-          end
+            if x isa SVector
+                @inbounds x[1] += nu[ev,:]
+            else
+                deltax = view(nu,ev,:)
+                for i in 1:nstates
+                    @inbounds x[1,i] += deltax[i]
+                end
+            end
           for xx in x
             push!(xa,xx)
           end
@@ -259,7 +271,7 @@ This function performs stochastic simulation using thinning/uniformization/Jense
 - **tf** : the final simulation time (`Float64`).
 - **max_rate**: the maximum rate (`Float64`).
 "
-function jensen_alljumps(x0::Vector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::Vector{Float64},tf::Float64,max_rate::Float64)
+function jensen_alljumps(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64)
     # Args
     tvc=true
     try

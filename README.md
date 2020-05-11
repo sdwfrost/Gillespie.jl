@@ -22,14 +22,14 @@ This is an implementation of [Gillespie's direct method](http://en.wikipedia.org
 The stable release of ```Gillespie.jl``` can be installed from the Julia REPL using the following command.
 
 ```julia
+using Pkg
 Pkg.add("Gillespie")
 ```
 
 The development version from this repository can be installed as follows.
 
 ```julia
-Pkg.clone("https://github.com/sdwfrost/Gillespie.jl")
-Pkg.build("Gillespie")
+Pkg.add("https://github.com/sdwfrost/Gillespie.jl")
 ```
 
 ## Example usage
@@ -85,17 +85,6 @@ The development version of ```Gillespie.jl``` includes code to simulate via unif
 ## The true jump method
 
 The development version of ```Gillespie.jl``` also includes code to simulate assuming time-varying rates via the true jump method; the API is the same as for the SSA, with the exception that the rate function must have three arguments, as described above.
-
-## Performance considerations
-
-Passing functions as arguments in Julia v0.4 incurs a performance penalty. One can circumvent this by passing an immutable object, with ```call``` overloaded, as follows.
-
-```julia
-immutable G; end
-call(::Type{G},x,parms) = F(x,parms)
-```
-
-An example of this approach is given [here](https://github.com/sdwfrost/Gillespie.jl/blob/master/examples/sir2.jl). This is the default behaviour in v0.5 and above.
 
 ## Benchmarks
 
