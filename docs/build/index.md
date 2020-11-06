@@ -120,7 +120,8 @@ Given the above, the simulation can be run using the function `ssa`. It's usuall
 
 
 ```julia
-srand(1236)
+using Random
+Random.seed!(1236)
 result = ssa(x0,F,nu,parms,tf);
 ```
 

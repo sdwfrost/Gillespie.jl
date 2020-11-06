@@ -39,6 +39,7 @@ An example of a [susceptible-infected-recovered (SIR) epidemiological model](htt
 ```julia
 using Gillespie
 using Gadfly
+using Random
 
 function F(x,parms)
   (S,I,R) = x
@@ -52,7 +53,7 @@ x0 = [999,1,0]
 nu = [[-1 1 0];[0 -1 1]]
 parms = [0.1/1000.0,0.01]
 tf = 250.0
-srand(1234)
+Random.seed!(1234)
 
 result = ssa(x0,F,nu,parms,tf)
 

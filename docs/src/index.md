@@ -73,7 +73,8 @@ tf = 1000.0;
 Given the above, the simulation can be run using the function `ssa`. It's usually a good idea to set a random number seed prior to simulation first.
 
 ```@example 1
-srand(1236)
+using Random
+Random.seed!(1236)
 result = ssa(x0,F,nu,parms,tf);
 ```
 
