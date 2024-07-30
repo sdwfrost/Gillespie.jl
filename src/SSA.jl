@@ -338,5 +338,10 @@ end
 
 "This takes a single argument of type `SSAResult` and returns a `DataFrame`."
 function ssa_data(s::SSAResult)
-    hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
+    # ERROR: LoadError: MethodError: Cannot `convert` an object of type Matrix{Int64} to an object of type DataFrames.DataFrame
+    # hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
+    hcat(
+        DataFrame(time=s.time),
+        DataFrame(s.data, :auto),
+    )
 end
