@@ -74,7 +74,7 @@ This function performs Gillespie's stochastic simulation algorithm. It takes the
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 "
-function gillespie(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64)
+function gillespie(x0::AbstractVector{Int64},F,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:gillespie,false)
     # Set up time array
@@ -131,7 +131,7 @@ This function performs the true jump method for piecewise deterministic Markov p
 - **parms** : a `Vector` of `Float64` representing the parameters of the system.
 - **tf** : the final simulation time (`Float64`).
 "
-function truejump(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64)
+function truejump(x0::AbstractVector{Int64},F,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64)
     # Args
     args = SSAArgs(x0,F,nu,parms,tf,:tjm,true)
     # Set up time array
@@ -194,9 +194,9 @@ This function performs stochastic simulation using thinning/uniformization/Jense
 - **tf** : the final simulation time (`Float64`).
 - **max_rate**: the maximum rate (`Float64`).
 "
-function jensen(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64,thin::Bool=true)
+function jensen(x0::AbstractVector{Int64},F,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64,thin::Bool=true)
     if thin==false
-      return jensen_alljumps(x0::AbstractVector{Int64},F::Base.Callable,nu::Matrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64)
+      return jensen_alljumps(x0,F,nu,parms,tf,max_rate)
     end
     tvc=true
     try
@@ -271,7 +271,7 @@ This function performs stochastic simulation using thinning/uniformization/Jense
 - **tf** : the final simulation time (`Float64`).
 - **max_rate**: the maximum rate (`Float64`).
 "
-function jensen_alljumps(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64)
+function jensen_alljumps(x0::AbstractVector{Int64},F,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64,max_rate::Float64)
     # Args
     tvc=true
     try
@@ -338,5 +338,8 @@ end
 
 "This takes a single argument of type `SSAResult` and returns a `DataFrame`."
 function ssa_data(s::SSAResult)
-    hcat(DataFrame(time=s.time),convert(DataFrame,s.data))
+    df = DataFrame(s.data, :auto)
+    rename!(df, [Symbol("x$i") for i in 1:size(s.data, 2)])
+    insertcols!(df, 1, :time => s.time)
+    return df
 end

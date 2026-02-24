@@ -3,6 +3,7 @@ module Gillespie
 using Distributions
 using DataFrames
 using QuadGK
+using Random
 using Roots
 using StaticArrays
 
@@ -35,7 +36,7 @@ There are several named arguments:
 - **thin**: (`Bool`) whether to thin jumps for Jensens method (default: `true`).
 
 "
-function ssa(x0::AbstractVector{Int64},F::Base.Callable,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64; algo=:gillespie, max_rate::Float64=0.0, thin::Bool=true)
+function ssa(x0::AbstractVector{Int64},F,nu::AbstractMatrix{Int64},parms::AbstractVector{Float64},tf::Float64; algo=:gillespie, max_rate::Float64=0.0, thin::Bool=true)
   @assert algo in [:gillespie,:jensen,:tjm] "Available algorithms are :gillespie, :jensen, and :tjm"
   if algo == :gillespie
     return gillespie(x0,F,nu,parms,tf)

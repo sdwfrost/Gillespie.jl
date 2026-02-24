@@ -1,10 +1,12 @@
 using Documenter, Gillespie
 
-makedocs(modules=[Gillespie],
-    doctest = false)
+makedocs(
+    modules = [Gillespie],
+    sitename = "Gillespie.jl",
+    doctest = false,
+)
 
 deploydocs(
-    deps = Deps.pip("mkdocs","python-markdown-math"),
     repo = "github.com/sdwfrost/Gillespie.jl.git",
-    julia = "release"
+    push_preview = true,
 )

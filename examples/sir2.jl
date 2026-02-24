@@ -1,5 +1,4 @@
 using Gillespie
-using Compat
 import Random: seed!
 
 function F_sir2(x,parms)
